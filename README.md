@@ -1,6 +1,6 @@
-===========================================
+==========================================
 Coursera data cleaning course final project
-===========================================
+==========================================
 
 This project consisted of merging and cleaning up a number of data sets into a single file that is easy to read and adheres to 'tidy data' principles.
 
