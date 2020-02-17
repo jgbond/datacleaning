@@ -38,6 +38,9 @@ subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt", header = 
 # Merge and tidy up tables #
 #############################
 
+# Merge the test and train sets
+set <- rbind(test_set, train_set) 
+
 # Make activity labels lower case
  activity_labels[,2] <- tolower(activity_labels[,2])
 
@@ -53,17 +56,7 @@ subject <- rename(subject, subject = V1)
 # Join activity labels to activity label numbers
 labels <- left_join(labels, activity_labels)
 
-# Create a variable "group" that notes if observations are for test or train groups 
-test_set_labeled <- mutate(test_set, group = "test")
-train_set_labeled <- mutate(train_set, group = "train")
-
-# Append "group" to features list so it will merge easily later
-features <- rbind(features, data.frame(V1 = 562, V2 = "group"))
-
-# Merge the test and train sets
-set <- rbind(test_set_labeled, train_set_labeled) 
-
-# Rename numbered columns of the set to the names of features + "group"
+# Rename numbered columns of the set to the names of features
 names(set) <- features[,2]
 
 # Merge all the data into a single set
@@ -74,8 +67,8 @@ means <- grep("mean", names(set))
 stds <- grep("std", names(set))
 
 # Create a list of the columns we want to keep
-# (group, subject, and activity are 565, 1, and 3, respectively)
-columns <- c(565, 1, 3, means, stds)
+# (subject and activity are 1 and 3, respectively)
+columns <- c(1, 3, means, stds)
 
 # Subset for the columns we want
 set <- set[,columns]
@@ -89,8 +82,7 @@ names(set) <- gsub("\\()", "", names(set))
 
 # Remove all the excess intermediate sets and values
 rm(activity_labels, features, labels, subject, subject_test, subject_train,
-   test_labels, test_set, test_set_labeled, train_labels, train_set,
-   train_set_labeled, columns, means, stds)
+   test_labels, test_set, train_labels, train_set, columns, means, stds)
 
 # We now have a tidy dataset!
 View(set)
